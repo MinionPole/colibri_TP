@@ -60,8 +60,11 @@ void CalculationWorker::exitWorker(){
 void CalculationWorker::doWorkStep(){
     sync.lock();
     inStep = true;
-    while(paused && onWork == 1)
+    while(paused && onWork == 1){
+        double percent = (static_cast<double>(readInFile) / currentFile->size());
+        emit refreshInfo(this->processedFiles, this->totalFiles, 2, percent);
         pauseCond.wait(&sync);
+    }
     if(onWork != 1){
         if(currentFile != nullptr){
             currentFile->close();
@@ -75,6 +78,7 @@ void CalculationWorker::doWorkStep(){
         resultFile = nullptr;
         delete dirIterator;
         inStep = false;
+        refreshInfo(this->processedFiles, this->totalFiles, 3, 1);
         if(onWork == -1)
             emit finished();
         sync.unlock();
@@ -95,11 +99,12 @@ void CalculationWorker::doWorkStep(){
                         this->currentFile = nullptr;
                         continue;
                     }
+                    readInFile = 0;
                     QFileInfo info(dirIterator->filePath());
                     QString newName = info.completeBaseName()+ QString::number(fileNameCnt++)+ "." + info.suffix();
                     resultFile = new QFile(data.resultPath + '/' + newName);
                     if (!resultFile->open(QIODevice::WriteOnly)) {
-                        qWarning() << "не открывается файл дебаг" << resultFile->errorString();
+                        qWarning() << "не открывается файл" << resultFile->errorString();
                         currentFile->close();
                         this->currentFile = nullptr;
                         this->resultFile = nullptr;
@@ -115,7 +120,6 @@ void CalculationWorker::doWorkStep(){
 
     if (this->currentFile != nullptr && !this->currentFile->atEnd()) {
         bufferFromFile = currentFile->read(4096);
-
         for (int i = 0; i < bufferFromFile.size(); i += 8) {
             int len = qMin(bufferFromFile.size() - i, 8);
             std::uint64_t chunk = 0;
@@ -129,16 +133,20 @@ void CalculationWorker::doWorkStep(){
         }
 
         resultFile->write(bufferFromFile);
-
+        readInFile += bufferFromFile.size();
+        double percent = (static_cast<double>(readInFile) / currentFile->size());
+        emit refreshInfo(this->processedFiles, this->totalFiles, 1, percent);
     }
     else {
         if(currentFile != nullptr){
+            emit refreshInfo(++this->processedFiles, this->totalFiles, 1, readInFile / currentFile->size());
             currentFile->close();
         }
         if(resultFile != nullptr){
             resultFile->close();
         }
-
+        if(this->data.deleteInitial)
+            currentFile->remove();
         delete currentFile;
         delete resultFile;
         currentFile = nullptr;

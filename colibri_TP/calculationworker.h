@@ -15,7 +15,7 @@ public:
 
 signals:
     void endOfWork();
-    void refreshInfo(int nowVals, int potentialVals);
+    void refreshInfo(int nowVals, int potentialVals, int flagOfWork, double PercentOfFile);
     void finished();
 
 private:
@@ -31,6 +31,7 @@ private:
     QByteArray bufferFromFile;
     int fileNameCnt;
     int totalFiles, processedFiles;
+    qint64 readInFile;
 
 public slots:
     void stopWorker();

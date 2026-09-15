@@ -22,7 +22,7 @@ public:
     quint32 workerIndex;
 
 public slots:
-    void refreshInfo(int nowVals, int potentialVals);
+    void refreshInfo(int nowVals, int potentialVals, int flagOfWork, double PercentOfFile);
 
 private:
     Ui::processWindow *ui;
