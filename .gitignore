@@ -55,4 +55,5 @@ compile_commands.json
 
 *_qmlcache.qrc
 
-initialFiles/longlongtext.txt
+initialFiles/*
+resultFiles/*
