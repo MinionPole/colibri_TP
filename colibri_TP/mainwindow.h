@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QIntValidator>
+#include <QCloseEvent>
 #include "calculationworker.h"
 #include "calculationData.h"
 #include "calculationthreadmanager.h"
@@ -23,6 +24,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     Ui::MainWindow *ui;

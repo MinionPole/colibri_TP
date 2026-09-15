@@ -8,7 +8,6 @@ processWindow::processWindow(quint32 workerIndex, QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle(QString("Process %1").arg(workerIndex));
-    resize(400, 400);
     ui->timeEdit->setDisplayFormat("mm:ss");
     timer = new QTimer(this);
     timer->setInterval(1000);
@@ -76,7 +75,7 @@ void processWindow::updateTimerEdit(){
     QTime currentTime = ui->timeEdit->time();
     if (currentTime == QTime(0, 0, 0)) {
         timer->stop();
-        this->getButton(0)->click();
+        ui->startExecButton->click();
         return;
     }
     ui->timeEdit->setTime(currentTime.addSecs(-1));
@@ -86,3 +85,8 @@ void processWindow::resetTimer(int time){
     ui->timeEdit->setTime(QTime::fromMSecsSinceStartOfDay(time * 1000));
     timer->start();
 };
+
+void processWindow::closeEvent(QCloseEvent *event) {
+    event->ignore();
+    ui->exitButton->click();
+}

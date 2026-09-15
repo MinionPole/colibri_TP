@@ -103,3 +103,10 @@ void MainWindow::startProcess(){
     int worker_val = this->TManager.createWorker(data);
     return;
 };
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    if(wantExit != 1){
+        event->ignore();
+        ui->exitMainMenuButton->click();
+    }
+}

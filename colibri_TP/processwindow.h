@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QTimer>
+#include <QCloseEvent>
 #include "calculationData.h"
 
 QT_BEGIN_NAMESPACE
@@ -18,6 +19,9 @@ public:
     ~processWindow() override;
     QPushButton* getButton(int ind);
     void setBaseInfo(const CalculationData& data);
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 public:
     quint32 workerIndex;
