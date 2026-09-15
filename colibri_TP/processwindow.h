@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPushButton>
+#include <QTimer>
 #include "calculationData.h"
 
 QT_BEGIN_NAMESPACE
@@ -23,9 +24,13 @@ public:
 
 public slots:
     void refreshInfo(int nowVals, int potentialVals, int flagOfWork, double PercentOfFile);
+    void resetTimer(int time);
+    void updateTimerEdit();
+
 
 private:
     Ui::processWindow *ui;
+    QTimer *timer;
 };
 
 #endif // PROCESSWINDOW_H

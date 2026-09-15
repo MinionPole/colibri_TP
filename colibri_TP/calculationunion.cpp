@@ -17,6 +17,8 @@ CalculationUnion::CalculationUnion(quint32 index, const CalculationData &data,
     connect(processWindowObj->getButton(3), &QPushButton::clicked, &worker, &CalculationWorker::stopWorker);
     connect(processWindowObj->getButton(4), &QPushButton::clicked, &worker, &CalculationWorker::exitWorker);
 
+    connect(&worker, &CalculationWorker::resetTimer, processWindowObj, &processWindow::resetTimer);
+
     connect(&worker, &CalculationWorker::refreshInfo, processWindowObj, &processWindow::refreshInfo);
 
     connect(&worker, &CalculationWorker::finished, &executionThread, &QThread::quit);
@@ -30,6 +32,8 @@ CalculationUnion::CalculationUnion(quint32 index, const CalculationData &data,
     });
 
     executionThread.start();
+    if(data.timerWork)
+        this->processWindowObj->getButton(0)->click();
 }
 
 CalculationUnion::~CalculationUnion()

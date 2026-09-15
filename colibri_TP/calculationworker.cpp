@@ -79,6 +79,8 @@ void CalculationWorker::doWorkStep(){
         delete dirIterator;
         inStep = false;
         refreshInfo(this->processedFiles, this->totalFiles, 3, 1);
+        if(this->data.timerWork)
+            emit resetTimer(this->data.timerTime);
         if(onWork == -1)
             emit finished();
         sync.unlock();

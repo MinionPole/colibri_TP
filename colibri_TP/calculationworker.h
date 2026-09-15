@@ -16,6 +16,7 @@ public:
 signals:
     void endOfWork();
     void refreshInfo(int nowVals, int potentialVals, int flagOfWork, double PercentOfFile);
+    void resetTimer(int time);
     void finished();
 
 private:
