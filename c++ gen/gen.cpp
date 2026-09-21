@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
     fs::path outDir = "C:\\work\\test_project\\colibri_TP\\initialFiles";
     std::string fileName = "longlongtext.txt";
-    std::size_t size = 100;
+    std::size_t size = 1000000000;
 
 
     std::random_device rd;

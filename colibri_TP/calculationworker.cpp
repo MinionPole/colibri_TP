@@ -52,9 +52,11 @@ void CalculationWorker::exitWorker(){
     sync.lock(); 
     onWork = -1;
     sync.unlock();
-    pauseCond.wakeAll();
+
     if(inStep == false)
         emit finished();
+    else
+        pauseCond.wakeAll();
 };
 
 void CalculationWorker::doWorkStep(){
@@ -78,6 +80,7 @@ void CalculationWorker::doWorkStep(){
         resultFile = nullptr;
         delete dirIterator;
         inStep = false;
+        paused = false;
         refreshInfo(this->processedFiles, this->totalFiles, 3, 1);
         if(this->data.timerWork)
             emit resetTimer(this->data.timerTime);
